@@ -12,13 +12,22 @@ namespace mvectors.neuralnetwork
         private int _inputNodes;
         private int _hiddenNodes;
         private ActivationNetwork _network;
-
-        public AForgeNeuralNetwork(int inputNodes, int hiddenNodes)
+        private int _staticWeights;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="inputNodes"></param>
+        /// <param name="hiddenNodes"></param>
+        /// <param name="staticWeights">The number of inputs to each node which are not affected by load and save methods in Theta. 
+        /// <remarks>Note this includes a bias/threshold term, along with the inputs to the layer</remarks></param>
+        public AForgeNeuralNetwork(int inputNodes, int hiddenNodes, int staticWeights = 0)
         {
-            _network = new ActivationNetwork(new SigmoidFunction(), inputNodes, hiddenNodes,1);
+            var fn = new SigmoidFunction(2);
+            _network = new ActivationNetwork(fn, inputNodes, hiddenNodes,1);
             _inputNodes = inputNodes;
             _hiddenNodes = hiddenNodes;
-
+            _staticWeights = staticWeights;
         }
         public void SetTheta(ITheta theta)
         {
@@ -28,23 +37,25 @@ namespace mvectors.neuralnetwork
         {
             get
             {
-
-                return new AForgeTheta
+                return new AForgeTheta(_staticWeights)
                 {
                     Layer = (ActivationLayer) _network.Layers[0]
-                };
+                };                
             }
             set
             {
                 var aforgeTheta = value as AForgeTheta;
-                if (aforgeTheta == null) throw new ArgumentException("Wrong implementation of ITheta", "theta");
+                if (aforgeTheta == null) throw new ArgumentException("Wrong implementation of ITheta");
 
                 _network = new ActivationNetwork(new SigmoidFunction(), _inputNodes, _hiddenNodes);
                 _network.Layers[0] = aforgeTheta.Layer;
             }
         }
 
-        
+        public double[] HiddenLayer
+        {
+            get { return _network.Layers[0].Output; }
+        }
         public double[] Run(double[] inputs)
         {
             return _network.Compute(inputs);
@@ -54,10 +65,13 @@ namespace mvectors.neuralnetwork
         {
             long counter = 0;
             var stopwatch = Stopwatch.StartNew();
-            var teacher = new BackPropagationLearning(_network);
+            var teacher = new BackPropagationLearning(_network)
+            {
+                LearningRate = 0.1
+            };
             double error = 1.0, lastError = 1.1;
             var trainingExamples = samples as ITrainingExample[] ?? samples.ToArray();
-            while (error > maxError && error < lastError)
+            while (error > maxError)// && error < lastError)
             {
                 lastError = error;
                 var inputs = trainingExamples.Select(x => x.Input).ToArray();
@@ -93,6 +107,11 @@ namespace mvectors.neuralnetwork
         public void Randomize()
         {
             _network.Randomize();
+        }
+
+        public ActivationNetwork UnderlyingNetwork
+        {
+            get { return _network; }
         }
     }
 }

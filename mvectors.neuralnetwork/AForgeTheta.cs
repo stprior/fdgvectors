@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AForge.Neuro;
 
 namespace mvectors.neuralnetwork
@@ -6,21 +7,32 @@ namespace mvectors.neuralnetwork
     public class AForgeTheta: ITheta
     {
         private ActivationLayer _layer;
-
+        private readonly int _startWeightsFrom;
+        public AForgeTheta() : this(0) { }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="staticWeights">The number of inputs to each node which are not affected by load and save methods in Theta. 
+        /// <remarks>Note this includes a bias term, along with the inputs to the layer</remarks></param>
+        public AForgeTheta(int staticWeights)
+        {
+            _startWeightsFrom = staticWeights;
+        }
         public ActivationLayer Layer
         {
             get { return _layer; }
             set { _layer = value; }
         }
 
-        public void LoadFrom(double[] weights,int startFrom=0)
+        public void LoadFrom(double[] weights)
         {
-            int i = 0;
-
-            for (int n = startFrom; i<_layer.Neurons.Length; i++)
-            {                
-                var neuron = _layer.Neurons[n];
-                for (int j = 0; j < neuron.Weights.Length; j++)
+            var i = 0;
+            foreach (var neuron in _layer.Neurons.Cast<ActivationNeuron>())
+            {
+                neuron.Threshold = weights[i];
+                i++;
+                for (var j = _startWeightsFrom; j < neuron.Weights.Length; j++)
                 {
                     neuron.Weights[j] = weights[i];
                     i++;
@@ -28,19 +40,23 @@ namespace mvectors.neuralnetwork
             }
         }
 
-        public double[] SaveTo(int startFrom=0)
+        public void SaveTo(ref double[] weights)
         {
-            var weights = new double[(_layer.Neurons.Length - startFrom)* _layer.Neurons[0].Weights.Length];
-            int i = 0;
-            foreach (var neuron in _layer.Neurons.Skip(startFrom))
+            if (weights == null) weights = new double[ArrayLength()];
+            var index = 0;
+            var increment = _layer.Neurons.First().Weights.Length - _startWeightsFrom;
+            foreach (var neuron in _layer.Neurons.Cast<ActivationNeuron>())
             {
-                foreach (var weight in neuron.Weights)
-                {
-                    weights[i] = weight;
-                    i++;
-                }
-            }
-            return weights;
+                weights[index] = neuron.Threshold;
+                index++;
+                Array.ConstrainedCopy(neuron.Weights,_startWeightsFrom,weights,index,increment);
+                index += increment;
+            }            
+        }
+
+        public int ArrayLength()
+        {
+            return _layer.Neurons.Length * (1 + (_layer.Neurons[0].Weights.Length - _startWeightsFrom));
         }
     }
 }

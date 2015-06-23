@@ -8,7 +8,9 @@ namespace mvectors.neuralnetwork
         /// Representation of the weights mapping input to hidden layer
         /// </summary>
         ITheta Theta { get; set; }
-    
+
+        double[] HiddenLayer { get; }
+
         double Train(IEnumerable<ITrainingExample> samples, double minError);
         double Train(ITrainingExample sample, double minError);
 

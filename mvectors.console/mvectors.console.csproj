@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{85382BB2-99EB-4300-84CE-CDCF1FBB5E7A}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{3FBEA268-57CC-400F-B2D3-14CEAD8E8E60}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>mvectors.neuralnetwork</RootNamespace>
-    <AssemblyName>mvectors.neuralnetwork</AssemblyName>
+    <RootNamespace>mvectors.console</RootNamespace>
+    <AssemblyName>mvectors.console</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,27 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accord">
-      <HintPath>..\packages\Accord.2.15.0\lib\net45\Accord.dll</HintPath>
-    </Reference>
-    <Reference Include="AForge">
-      <HintPath>C:\Code\aforge\Release\AForge.dll</HintPath>
-    </Reference>
-    <Reference Include="AForge.Genetic">
-      <HintPath>C:\Code\aforge\Release\AForge.Genetic.dll</HintPath>
-    </Reference>
-    <Reference Include="AForge.Math">
-      <HintPath>C:\Code\aforge\Release\AForge.Math.dll</HintPath>
-    </Reference>
-    <Reference Include="AForge.Neuro">
-      <HintPath>C:\Code\aforge\Release\AForge.Neuro.dll</HintPath>
-    </Reference>
-    <Reference Include="MathNet.Numerics">
-      <HintPath>..\packages\MathNet.Numerics.3.7.0\lib\net40\MathNet.Numerics.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,18 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AForgeNeuralNetwork.cs" />
-    <Compile Include="AForgeTheta.cs" />
-    <Compile Include="INeuralNetwork.cs" />
-    <Compile Include="INeuralNetworkFactory.cs" />
-    <Compile Include="ITheta.cs" />
-    <Compile Include="ITrainingExample.cs" />
-    <Compile Include="NeuralNetwork.cs" />
-    <Compile Include="NeuralNetworkFactory.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\mvectors.logic\mvectors.logic.csproj">
+      <Project>{408e2dc5-b69a-44b8-b5d2-066fb5c333cb}</Project>
+      <Name>mvectors.logic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
