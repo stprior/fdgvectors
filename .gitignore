@@ -154,3 +154,12 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+/packages/Accord.2.15.0
+/packages/AForge.2.2.5
+/packages/AForge.Math.2.2.5
+/packages/AForge.Genetic.2.2.5
+/packages/AForge.Neuro.2.2.5
+/packages/Eigen.3.2.4
+/packages/FluentAssertions.3.3.0
+/packages/MathNet.Numerics.3.7.0
+/packages/NSubstitute.1.8.2.0
