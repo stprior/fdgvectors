@@ -10,11 +10,12 @@ namespace mvectors.console
 {
     class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
+            Console.WriteLine("Use the unit tests");
             var loader = new WordVectorLoader(args[0]);
             var vectors = loader.LoadVectors();
-            
+
             string fileName;
             if (args.Length == 1)
             {
@@ -32,9 +33,21 @@ namespace mvectors.console
             Console.Write(firstWord != null ? firstWord.Word : "empty file");
             var contextMaps = new ContextMaps();
             var sentenceLearner = new SentenceLearner(vectors, sentences, contextMaps);
+            var plan = sentenceLearner.PreparePlan(4);
+            sentenceLearner.ExecutePlan(plan, MorphoSyntacticContext.InitialState());
 
             //sentenceLearner.Learn(1);
-            Console.ReadLine();
+            while (true)
+            {
+                Console.Write("\n> ");
+                var stdinReader = new StoryReader(Console.In);
+                var sentence = stdinReader.ReadSentence();
+                if (sentence.Words[0].IsEndOfSentence()) break;
+                var result = sentenceLearner.Run(sentence);
+                Console.WriteLine(result);
+
+            }
+            Console.WriteLine("Quitting");
         }
     }
 }

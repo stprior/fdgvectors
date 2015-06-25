@@ -4,7 +4,7 @@ namespace mvectors.logic
 {
     public class ContextMaps
     {
-        private Dictionary<WrittenWord,ContextMap> _contextMapLookup = new Dictionary<WrittenWord, ContextMap>();
+        private readonly Dictionary<WrittenWord,ContextMap> _contextMapLookup = new Dictionary<WrittenWord, ContextMap>();
 
         public ContextMap For(WrittenWord word)
         {
@@ -23,5 +23,9 @@ namespace mvectors.logic
             return _contextMapLookup.ContainsKey(writtenWord);
         }
 
+        public IEnumerable<KeyValuePair<WrittenWord, ContextMap>> AllItems()
+        {
+            return _contextMapLookup;
+        }
     }
 }

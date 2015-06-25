@@ -1,0 +1,1 @@
+﻿Copy this file from https://s3-eu-west-1.amazonaws.com/fdgvectors/wikipedia_vectors.txt

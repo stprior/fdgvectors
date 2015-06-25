@@ -15,12 +15,17 @@ namespace mvectors.logic
 
         public WordVectorLoader(string filename)
         {
+
             if (!File.Exists(filename)) throw new FileNotFoundException(String.Format("{0} not found", filename));
             _vectorFileReader = File.OpenText(filename);
             var readLine = _vectorFileReader.ReadLine();
             if (readLine == null)
             {
                 throw new InvalidDataException("Missing header line");
+            }
+            if (readLine.StartsWith("Copy this file from"))
+            {
+                throw new InvalidDataException("The file wikipedia_vectors.txt needs to be replaced. " + readLine);
             }
             var headerFields = readLine.Split(' ');
             _numEntries = int.Parse(headerFields[0]);

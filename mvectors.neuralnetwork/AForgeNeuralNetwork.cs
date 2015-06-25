@@ -23,7 +23,7 @@ namespace mvectors.neuralnetwork
         /// <remarks>Note this includes a bias/threshold term, along with the inputs to the layer</remarks></param>
         public AForgeNeuralNetwork(int inputNodes, int hiddenNodes, int staticWeights = 0)
         {
-            var fn = new SigmoidFunction(2);
+            var fn = new BipolarSigmoidFunction();
             _network = new ActivationNetwork(fn, inputNodes, hiddenNodes,1);
             _inputNodes = inputNodes;
             _hiddenNodes = hiddenNodes;
