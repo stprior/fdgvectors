@@ -90,6 +90,7 @@ namespace mvectors.logic
                 }                
 
                 wordVector = _vectors[word];
+                if (wordVector == null) continue;
                 Array.Copy(wordVector.Elements,inputs,WordVector.VectorLength);
                 Array.Copy(context.Elements, 0, inputs, WordVector.VectorLength, MorphoSyntacticContext.VectorLength);
                 

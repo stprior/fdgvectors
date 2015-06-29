@@ -18,12 +18,31 @@ namespace mvectors.logic.test
         public void LoadAndLearn()
         {
             var wvl =new WordVectorLoader("wikipedia_vectors.txt");
+            var sw = Stopwatch.StartNew();
             _wordVectors = wvl.LoadVectors();
+            sw.Stop();
+            Debug.WriteLine("Loaded word vectors in {0} ms", sw.ElapsedMilliseconds);
             var s = new StoryReader("WikiJunior_Biology.txt");
             var sentences = s.ReadStory();
             _contextMaps = new ContextMaps();
             _sentenceLearner = new SentenceLearner(_wordVectors, sentences, _contextMaps);
-            var plan = _sentenceLearner.PreparePlan(4);
+            var plan = _sentenceLearner.PreparePlan(12);
+            _sentenceLearner.ExecutePlan(plan, MorphoSyntacticContext.InitialState());
+        }
+
+        [TestMethod]
+        public void AsyncLoadAndLearn()
+        {
+            var wvl = new AsyncWordVectorLoader("wikipedia_vectors.txt");
+            var sw = Stopwatch.StartNew();
+            _wordVectors = wvl.LoadVectors();
+            sw.Stop();
+            Debug.WriteLine("Loaded word vectors in {0} ms", sw.ElapsedMilliseconds);
+            var s = new StoryReader("WikiJunior_Biology.txt");
+            var sentences = s.ReadStory();
+            _contextMaps = new ContextMaps();
+            _sentenceLearner = new SentenceLearner(_wordVectors, sentences, _contextMaps);
+            var plan = _sentenceLearner.PreparePlan(12);
             _sentenceLearner.ExecutePlan(plan, MorphoSyntacticContext.InitialState());
         }
 

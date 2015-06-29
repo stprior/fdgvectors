@@ -75,6 +75,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="SenseCheck.cs" />
     <Compile Include="NeuralNetworkTest.cs" />
     <Compile Include="SentenceLearnerTest.cs" />
     <Compile Include="StoryReaderTest.cs" />

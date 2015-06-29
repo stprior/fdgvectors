@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 
 namespace mvectors.logic
 {
     public class WordVectorLoader
     {
         private readonly System.Diagnostics.TraceSource _trace = new System.Diagnostics.TraceSource(typeof(WordVectorLoader).ToString());
-        readonly StreamReader _vectorFileReader;
+        protected StreamReader _vectorFileReader;
         readonly int _numDimensions;
-        readonly int _numEntries;
+        protected readonly int _numEntries;
         
-        readonly WordVectors _wordVectors;
+        protected readonly WordVectors WordVectors;
 
         public WordVectorLoader(string filename)
         {
@@ -31,21 +33,18 @@ namespace mvectors.logic
             _numEntries = int.Parse(headerFields[0]);
             _numDimensions = int.Parse(headerFields[1]);
 
-            _wordVectors = new WordVectors(_numEntries);
+            WordVectors = new WordVectors(_numEntries);
         }
 
-        public WordVectors LoadVectors()
+        public virtual WordVectors LoadVectors()
         {
-            //List<Task> tasks = new List<Task>(_numEntries);
             for (var i = 0; i < _numEntries; i++)
             {
-                //var nextLineTask = _vectorFileReader.ReadLineAsync();
                 var nextLine = _vectorFileReader.ReadLine();
                 Parse(nextLine);
-//                tasks.Add(newVectorTask);
             }
-            return _wordVectors;
-            //          Task.WaitAll(tasks.ToArray());
+            return WordVectors;
+
         }
 
         public void Parse(string line)
@@ -54,13 +53,13 @@ namespace mvectors.logic
             {
                 //            var line = await lineTask;
                 var wv = ParseLine(line);
-                _wordVectors.TryAdd(wv.Name, wv);
+                WordVectors.TryAdd(wv.Name, wv);
             }
             catch (LoaderException)
             { }
         }
 
-        private WordVector ParseLine(string line)
+        protected WordVector ParseLine(string line)
         {
             var fields = line.Split(' ');
             var name = fields[0];

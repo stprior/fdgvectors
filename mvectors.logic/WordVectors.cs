@@ -24,7 +24,7 @@ namespace mvectors.logic
 
         public WordVector this[WrittenWord writtenWord]
         {
-            get { return _wordVectorDictionary[writtenWord.Word]; }
+            get { return _wordVectorDictionary.ContainsKey(writtenWord.Word) ?  _wordVectorDictionary[writtenWord.Word] : null; }
         }
 
         public WordVector RandomExcluding(HashSet<WordVector> exclusions)
